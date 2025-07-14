@@ -100,6 +100,15 @@ void AThrower::SpawnObject(TSubclassOf<AActor> Prefab, UMaterialInterface* Mater
         {
             MeshComponent->SetMaterial(0, Material);
 
+            if (Output == 0)
+            {
+                MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+            }
+            else
+            {
+                MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
+            }
+
             if (MeshComponent->IsSimulatingPhysics())
             {
                 MeshComponent->AddImpulse(GetActorForwardVector() * 500.0f, NAME_None, true);
