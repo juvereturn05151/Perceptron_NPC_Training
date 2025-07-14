@@ -65,11 +65,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SendInput(double i1, double i2, double o);
 
-	void ResetTrainingSets()
-	{
-		trainingSets.Empty();
-		totalError = 0.0;
-		InitializeWeights();
-	}
+	void ResetTrainingSets();
+
+	void LoadWeights();
+
+	void SaveWeights() ;
 
 };

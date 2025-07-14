@@ -38,7 +38,29 @@ void AThrower::Tick(float DeltaTime)
     APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
     if (!PlayerController) return;
 
+    if (PlayerController->IsInputKeyDown(EKeys::SpaceBar))
+    {
+        if (Perceptron) 
+        {
+            Perceptron->ResetTrainingSets();
+        }
+    }
 
+    if (PlayerController->IsInputKeyDown(EKeys::S))
+    {
+        if (Perceptron)
+        {
+            Perceptron->SaveWeights();
+        }
+    }
+
+    if (PlayerController->IsInputKeyDown(EKeys::L))
+    {
+        if (Perceptron)
+        {
+            Perceptron->LoadWeights();
+        }
+    }
 
     if (PlayerController->IsInputKeyDown(EKeys::One))
     {

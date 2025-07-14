@@ -125,3 +125,42 @@ void APerceptron::SendInput(double i1, double i2, double o)
 	TrainPerceptron();
 }
 
+void APerceptron::ResetTrainingSets()
+{
+	trainingSets.Empty();
+	totalError = 0.0;
+	InitializeWeights();
+}
+
+void APerceptron::LoadWeights()
+{
+	FString Path = FPaths::ProjectContentDir() + TEXT("weights.txt");
+	FString FileContent;
+
+	if (FFileHelper::LoadFileToString(FileContent, *Path))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Loading Weights"));
+
+		TArray<FString> Parsed;
+		FileContent.ParseIntoArray(Parsed, TEXT(","), true);
+
+		if (Parsed.Num() >= 3)
+		{
+			weights[0] = FCString::Atod(*Parsed[0]);
+			weights[1] = FCString::Atod(*Parsed[1]);
+			bias = FCString::Atod(*Parsed[2]);
+		}
+	}
+}
+
+void APerceptron::SaveWeights()
+{
+	FString Path = FPaths::ProjectContentDir() + TEXT("weights.txt");
+
+	FString Line = FString::SanitizeFloat(weights[0]) + TEXT(",") +
+		FString::SanitizeFloat(weights[1]) + TEXT(",") +
+		FString::SanitizeFloat(bias);
+
+	FFileHelper::SaveStringToFile(Line, *Path);
+}
+
