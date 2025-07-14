@@ -40,9 +40,13 @@ private:
 	void TrainPerceptron();
 
 protected: 
+	UPROPERTY(VisibleAnywhere, Category = "Info")
 	TArray<FTrainingSet> trainingSets;
+	UPROPERTY(VisibleAnywhere, Category = "Info")
 	TArray<double> weights;
+	UPROPERTY(VisibleAnywhere, Category = "Info")
 	double bias;
+	UPROPERTY(VisibleAnywhere, Category = "Info")
 	double totalError;
 
 protected:
@@ -61,6 +65,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SendInput(double i1, double i2, double o);
 
-
+	void ResetTrainingSets()
+	{
+		trainingSets.Empty();
+		totalError = 0.0;
+		InitializeWeights();
+	}
 
 };

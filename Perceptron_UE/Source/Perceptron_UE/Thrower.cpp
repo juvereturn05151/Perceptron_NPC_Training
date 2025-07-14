@@ -3,6 +3,7 @@
 
 #include "Thrower.h"
 #include "Logging/LogMacros.h"
+#include "Perceptron_UE/Public/Perceptron.h"
 // Sets default values
 AThrower::AThrower()
 {
@@ -15,38 +16,52 @@ AThrower::AThrower()
 void AThrower::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    if (PerceptronClass) // assuming you set this from Blueprint
+    {
+        FActorSpawnParameters SpawnParams;
+        SpawnParams.Owner = this;
+        SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+        Perceptron = GetWorld()->SpawnActor<APerceptron>(PerceptronClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+    }
 }
 
 // Called every frame
 void AThrower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+    CooldownTimer -= DeltaTime;
+
+    if (CooldownTimer > 0.0f) return;
+
     APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
     if (!PlayerController) return;
 
+
+
     if (PlayerController->IsInputKeyDown(EKeys::One))
     {
-        SpawnObject(SpherePrefab, RedMaterial, GetActorLocation(), GetActorRotation()/*, 0, 0, 0*/);
+        SpawnObject(SpherePrefab, RedMaterial, GetActorLocation(), GetActorRotation(), 0, 0, 0);
     }
     else if (PlayerController->IsInputKeyDown(EKeys::Two))
     {
-        SpawnObject(SpherePrefab, GreenMaterial, GetActorLocation(), GetActorRotation()/*, 0, 1, 1*/);
+        SpawnObject(SpherePrefab, GreenMaterial, GetActorLocation(), GetActorRotation(), 0, 1, 1);
     }
     else if (PlayerController->IsInputKeyDown(EKeys::Three))
     {
-        SpawnObject(CubePrefab, RedMaterial, GetActorLocation(), GetActorRotation()/*, 1, 0, 1*/);
+        SpawnObject(CubePrefab, RedMaterial, GetActorLocation(), GetActorRotation(), 1, 0, 0);
     }
     else if (PlayerController->IsInputKeyDown(EKeys::Four))
     {
-        SpawnObject(CubePrefab, GreenMaterial, GetActorLocation(), GetActorRotation()/*, 1, 1, 1*/);
+        SpawnObject(CubePrefab, GreenMaterial, GetActorLocation(), GetActorRotation(), 1, 1, 1);
     }
 }
 
 void AThrower::SpawnObject(TSubclassOf<AActor> Prefab, UMaterialInterface* Material,
-    FVector Location, FRotator Rotation/*, int32 ShapeType, int32 ColorType, int32 Output*/)
+    FVector Location, FRotator Rotation, int32 ShapeType, int32 ColorType, int32 Output)
 {
-    if (!Prefab || !Material/* || !Perceptron*/) return;
+    if (!Prefab || !Material || !Perceptron) return;
 
     UWorld* World = GetWorld();
     if (!World) return;
@@ -69,7 +84,8 @@ void AThrower::SpawnObject(TSubclassOf<AActor> Prefab, UMaterialInterface* Mater
             }
         }
 
-        // Perceptron->SendInput(ShapeType, ColorType, Output);
+        Perceptron->SendInput(ShapeType, ColorType, Output);
     }
+    CooldownTimer = CooldownDuration;
 }
 

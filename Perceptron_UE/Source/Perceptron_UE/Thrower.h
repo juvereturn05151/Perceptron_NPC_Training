@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "Thrower.generated.h"
 
 // Forward declarations
-// class UPerceptron; 
+class APerceptron; 
 class UInputMappingContext;
 class UInputAction;
 
@@ -43,10 +44,16 @@ public:
 	UMaterialInterface* RedMaterial;
 
 private:
-	// UPROPERTY()
-	// UPerceptron* Perceptron;
+	UPROPERTY(EditAnywhere, Category = "Perceptron")
+	TSubclassOf<APerceptron> PerceptronClass;
+
+	UPROPERTY()
+	APerceptron* Perceptron;
+
+	float CooldownTimer = 0.0f;
+	const float CooldownDuration = 0.5f;
 
 	void SpawnObject(TSubclassOf<AActor> Prefab, UMaterialInterface* Material,
-		FVector Location, FRotator Rotation/*, int32 ShapeType, int32 ColorType, int32 Output*/);
+		FVector Location, FRotator Rotation, int32 ShapeType, int32 ColorType, int32 Output);
 
 };

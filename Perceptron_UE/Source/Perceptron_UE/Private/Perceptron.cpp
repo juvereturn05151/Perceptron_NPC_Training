@@ -104,24 +104,15 @@ void APerceptron::SendInput(double i1, double i2, double o)
 
 	if (IsValid(NPC))
 	{
-		USkeletalMeshComponent* SkeletalMesh = NPC->FindComponentByClass<USkeletalMeshComponent>();
 		UPrimitiveComponent* Rigidbody = NPC->FindComponentByClass<UPrimitiveComponent>();
 
 		if (result == 0.0)
 		{
 			NPC->Jump();
-
-			if (Rigidbody)
-			{
-				Rigidbody->SetSimulatePhysics(true);
-			}
 		}
 		else
 		{
-			if (Rigidbody)
-			{
-				Rigidbody->SetSimulatePhysics(false);
-			}
+
 		}
 	}
 
