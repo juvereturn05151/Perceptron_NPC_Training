@@ -28,7 +28,6 @@ void AThrower::Tick(float DeltaTime)
     if (PlayerController->IsInputKeyDown(EKeys::One))
     {
         SpawnObject(SpherePrefab, RedMaterial, GetActorLocation(), GetActorRotation()/*, 0, 0, 0*/);
-        printf(" 1");
     }
     else if (PlayerController->IsInputKeyDown(EKeys::Two))
     {
